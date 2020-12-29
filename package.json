@@ -5,8 +5,29 @@
   "author": "tracilevine <televine@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.9",
     "node": "^15.4.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "path": "^0.12.7",
+    "validator": "^13.5.2"
+  },
+  "repository": "https://github.com/MVP-Marketplace/Digital_Cookbook.git",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "cd client && yarn run start",
+    "dev": "concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
+    "heroku-postbuild": "cd client && yarn && yarn run build",
+    "prettify": "prettier '*/**/*.js' '*/**/*.jsx' '*/**/*.html' '*/**/*.css' --write"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
   }
 }
