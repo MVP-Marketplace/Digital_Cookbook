@@ -2,9 +2,8 @@ const mongoose = require("mongoose"),
   jwt = require("jsonwebtoken"),
   User = require("../../db/models/users.models");
 require("dotenv").config();
-console.log(process.env.MONGODB_URL)
-afterAll(async () => {
 
+afterAll(async () => {
   await mongoose.connection.close();
 });
 
