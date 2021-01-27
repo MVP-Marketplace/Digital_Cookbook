@@ -6,10 +6,10 @@ morgan = require('morgan'),
 cors = require('cors'),
 mongoose = require('mongoose');
 
-mongoose.connect("mongodb://localhost/Digi-cookbook", {
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}) 
+}).then((result)=> console.log('connected to db'))
 app.use(morgan('dev'));
     
 app.use(bodyParser.json());

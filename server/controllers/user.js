@@ -40,7 +40,8 @@ module.exports = {
         res.json({success:true});
     },
 
-    signOut: async() => {
-        console.log('route hit')
+    signOut: async(req, res, next) => {
+        res.clearCookie('access_token');
+        res.json({ success: true });
     }
 }
