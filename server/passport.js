@@ -1,7 +1,7 @@
 const passport = require('passport'),
 JWTStrategy = require('passport-jwt').Strategy,
 LocalStrategy = require('passport-local').Strategy,
-GooglePlusTokenStrategy = require('passport-facebook-token'),
+GooglePlusTokenStrategy = require('passport-google-plus-token'),
 FacebookTokenStrategy = require('passport-facebook-token'),
 config = require('./config'),
 User = require('./models/users');
@@ -26,20 +26,66 @@ passport.use(new JWTStrategy({
         if(!user) {
             return done(null, false);
         }
-
         req.user = user;
         done(null, user);
     } catch (error) {
         done(error, false);
     }
 }));
+passport.use('googleToken', new GooglePlusTokenStrategy({
+    clientID: process.env.GOOGLECLIENTID,
+    clientSecret: process.env.GOOGLECLIENTSECRET,
+    passReqToCallback: true
+}, async (req, accessToken, refreshToken, profile, done)=>{
+    try{
+        console.log('profile', profile.displayName);
+        console.log('accessToken', accessToken);
+        console.log('refreshToken', refreshToken);
 
+        if(req.user){
+            req.user.method.push('google')
+            req.user.google ={
+                id: profile.id,
+                email: profile.emails[0],
+            }
+            await req.user.save()
+            return done(null, req.user)
+        } else {
+            let existingUser = await User.findOne({ "google.id": profile.id });
+            if (existingUser) {
+              return done(null, existingUser);
+                }
+            }
+                  existingUser = await User.findOne({ "local.email": profile.emails[0] })
+      if (existingUser) {
+        existingUser.methods.push('google')
+        existingUser.google = {
+          id: profile.id,
+          email: profile.emails[0]
+        }
+        await existingUser.save()
+        return done(null, existingUser);
+      }
+            const newUser = new User({
+                methods: ['google'],
+                google:{
+                    id: profile.id,
+                    email: profile.emails[0],
+                    name: profile.displayName
+                }
+            })
+            await newUser.save();
+            done(null, newUser)
+    }
+    catch(error){
+        done(error,false, error.message)
+    }
+})),
 // Local Strategy
 passport.use(new LocalStrategy({
     usernameField: 'email'
 }, async (email, password, done) => {
     try {
-
         const user = await User.findByCredentials(email, password);
         if(!user) {
             return done(null, false);
@@ -48,4 +94,4 @@ passport.use(new LocalStrategy({
     } catch (error) {
         done(error, false);
     }
-}));
+}))
