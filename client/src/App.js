@@ -5,6 +5,7 @@ import SignUpPage from './components/SignUpPage';
 import LoginPage from './components/LoginPage';
 import GalleryPage from './components/GalleryPage';
 import RecipePage from './components/RecipePage';
+import PageNotFound from './components/PageNotFound';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/gallery" component={GalleryPage} />
         <Route exact path="/recipe" component={RecipePage} />
+        <Route component={PageNotFound} /> 
       </Switch>
     </BrowserRouter>
   );
