@@ -34,7 +34,7 @@ passport.use(new JWTStrategy({
 }));
 passport.use('facebookToken', new FacebookTokenStrategy({
     clientID: process.env.FACEBOOKAPPID,
-    clientSecret: process.env.f7c502a9db2f9bb951796aaafd349b18,
+    clientSecret: process.env.FACEBOOKAPPSECRETE,
     passReqToCallback: true
 }))
 passport.use('googleToken', new GooglePlusTokenStrategy({
