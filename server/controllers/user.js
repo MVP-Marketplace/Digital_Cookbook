@@ -54,5 +54,12 @@ module.exports = {
             httpOnly: true
         })
         res.status(200).json({success: true})
+    },
+    facebookOauth: async (req, res, next) =>{
+        const token = singToken(req.user);
+        res.cookie('access_token', token,{
+            httpOnly: true
+        })
+        res.status(200).json({success: true})
     }
 } 

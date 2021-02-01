@@ -32,13 +32,18 @@ passport.use(new JWTStrategy({
         done(error, false);
     }
 }));
+passport.use('facebookToken', new FacebookTokenStrategy({
+    clientID: process.env.FACEBOOKAPPID,
+    clientSecret: process.env.f7c502a9db2f9bb951796aaafd349b18,
+    passReqToCallback: true
+}))
 passport.use('googleToken', new GooglePlusTokenStrategy({
     clientID: process.env.GOOGLECLIENTID,
     clientSecret: process.env.GOOGLECLIENTSECRET,
     passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done)=>{
+    
     try{
-        console.log('profile', profile.displayName);
         console.log('accessToken', accessToken);
         console.log('refreshToken', refreshToken);
 
@@ -46,7 +51,7 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
             req.user.method.push('google')
             req.user.google ={
                 id: profile.id,
-                email: profile.emails[0],
+                email: profile.emails[0].value,
             }
             await req.user.save()
             return done(null, req.user)
@@ -56,7 +61,7 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
               return done(null, existingUser);
                 }
             }
-                  existingUser = await User.findOne({ "local.email": profile.emails[0] })
+                  existingUser = await User.findOne({ "local.email": profile.emails[0].value })
       if (existingUser) {
         existingUser.methods.push('google')
         existingUser.google = {
@@ -70,8 +75,8 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
                 methods: ['google'],
                 google:{
                     id: profile.id,
-                    email: profile.emails[0],
-                    name: profile.displayName
+                    email: profile.emails[0].value,
+                    name: profile.name.givenName,
                 }
             })
             await newUser.save();

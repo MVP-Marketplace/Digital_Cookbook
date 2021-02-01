@@ -13,6 +13,8 @@ router.route('/signup')
 
 router.route('/oauth/google')
 .post(passport.authenticate('googleToken', {session: false}), UserController.googleOauth)
+router.route('/oauth/facebook')
+.post(passport.authenticate('googleToken', {session: false}), UserController.facebookOauth)
 
 router.route('/signin')
 .post(validateBody(schemas.authSchema), passportSignIn, UserController.signIn);
