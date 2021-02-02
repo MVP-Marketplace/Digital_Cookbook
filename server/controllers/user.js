@@ -1,7 +1,7 @@
 const JWT = require('jsonwebtoken'),
 User = require('../models/users');
 
-singToken = user => {
+signToken = user => {
     return JWT.sign({
         _id: user._id.toString(), name: user.name
         }, process.env.JWT_SECRET,
@@ -29,7 +29,7 @@ module.exports = {
 
 
         await newUser.save();
-        const token = singToken(newUser);
+        const token = signToken(newUser);
         res.cookie('access_token', token, {
             httpOnly: true
         })
@@ -37,7 +37,7 @@ module.exports = {
     },
 
     signIn: async (req, res, next) => {
-        const token = singToken(req.user);
+        const token = signToken(req.user);
         res.cookie('access_token', token, {
             httpOnly: true
         });
@@ -49,14 +49,14 @@ module.exports = {
     },
 
     googleOauth: async (req, res, next) =>{
-        const token = singToken(req.user);
+        const token = signToken(req.user);
         res.cookie('access_token', token,{
             httpOnly: true
         })
         res.status(200).json({success: true})
     },
     facebookOauth: async (req, res, next) =>{
-        const token = singToken(req.user);
+        const token = signToken(req.user);
         res.cookie('access_token', token,{
             httpOnly: true
         })

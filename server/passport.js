@@ -3,7 +3,7 @@ JWTStrategy = require('passport-jwt').Strategy,
 LocalStrategy = require('passport-local').Strategy,
 GooglePlusTokenStrategy = require('passport-google-plus-token'),
 FacebookTokenStrategy = require('passport-facebook-token'),
-config = require('./config'),
+config = require('./config/index'),
 User = require('./models/users');
 
 const cookieExtractor = req => {
@@ -34,9 +34,57 @@ passport.use(new JWTStrategy({
 }));
 passport.use('facebookToken', new FacebookTokenStrategy({
     clientID: process.env.FACEBOOKAPPID,
-    clientSecret: process.env.f7c502a9db2f9bb951796aaafd349b18,
+    clientSecret: process.env.FACEBOOKAPPSECRETE,
     passReqToCallback: true
-}))
+    },
+    async(req, accessToken, refreshToken, profile, done)=>{
+        try {
+            console.log('profile', profile);
+            console.log('accessToken', accessToken);
+            console.log('refreshToken', refreshToken);
+            
+            if (req.user) {
+              req.user.methods.push('facebook')
+              req.user.facebook = {
+                id: profile.id,
+                email: profile.emails[0].value
+              }
+              await req.user.save();
+              return done(null, req.user);
+            } else {
+              let existingUser = await User.findOne({ "facebook.id": profile.id });
+              if (existingUser) {
+                return done(null, existingUser);
+              }
+              existingUser = await User.findOne({ "local.email": profile.emails[0].value })
+              if (existingUser) {
+                existingUser.methods.push('facebook')
+                existingUser.facebook = {
+                  id: profile.id,
+                  email: profile.emails[0].value
+                }
+                await existingUser.save()
+                return done(null, existingUser);
+              }
+        
+              const newUser = new User({
+                methods: ['facebook'],
+                facebook: {
+                  id: profile.id,
+                  email: profile.emails[0].value,
+                  name: profile.displayName
+                }
+              });
+              await newUser.save();
+              done(null, newUser);
+            }
+          } catch(error) {
+            done(error, false, error.message);
+          }
+        }
+
+    )
+)
 passport.use('googleToken', new GooglePlusTokenStrategy({
     clientID: process.env.GOOGLECLIENTID,
     clientSecret: process.env.GOOGLECLIENTSECRET,
