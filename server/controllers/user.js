@@ -1,7 +1,7 @@
 const JWT = require('jsonwebtoken'),
 User = require('../models/users');
 
-singToken = user => {
+signToken = user => {
     return JWT.sign({
         _id: user._id.toString(), name: user.name
         }, process.env.JWT_SECRET,
@@ -10,22 +10,26 @@ singToken = user => {
 
 module.exports = {
     signUp: async (req, res, next) => {
-        const {email, password} = req.value.body;
-        
+        const {userName,email, password} = req.value.body;
+
         let foundUser = await User.findOne({"local.email": email});
         if(foundUser) {
             return res.status(403).json({error: "Check login credentials"})
         }
-        
+
+
         const newUser = new User({
             methods: ['local'],
             local: {
+                userName: userName,
                 email: email,
-                password: password
+                password: password,
             }
         })
+
+
         await newUser.save();
-        const token = singToken(newUser);
+        const token = signToken(newUser);
         res.cookie('access_token', token, {
             httpOnly: true
         })
@@ -33,15 +37,29 @@ module.exports = {
     },
 
     signIn: async (req, res, next) => {
-        const token = singToken(req.user);
+        const token = signToken(req.user);
         res.cookie('access_token', token, {
             httpOnly: true
         });
         res.json({success:true});
     },
 
-    signOut: async(req, res, next) => {
-        res.clearCookie('access_token');
-        res.json({ success: true });
+    signOut: async() => {
+        console.log('route hit')
+    },
+
+    googleOauth: async (req, res, next) =>{
+        const token = signToken(req.user);
+        res.cookie('access_token', token,{
+            httpOnly: true
+        })
+        res.status(200).json({success: true})
+    },
+    facebookOauth: async (req, res, next) =>{
+        const token = signToken(req.user);
+        res.cookie('access_token', token,{
+            httpOnly: true
+        })
+        res.status(200).json({success: true})
     }
-}
+} 

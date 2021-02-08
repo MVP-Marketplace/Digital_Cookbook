@@ -12,11 +12,39 @@ const userSchema = new Schema({
             type: String,
             lowercase: true
         },
-        password: String
+        password: String,
+        userName: String,
+       
     },
     tokens: [
-        {token: mongoose.Types.ObjectId}
-    ]
+        {
+            token: mongoose.Types.ObjectId
+        }
+    ],
+    google: {
+        id:{
+            type: String,
+        },
+        email:{
+            type: String,
+            lowercase: true
+        },
+        name:{
+            type: String
+        }
+    },
+    facebook: {
+        id:{
+            type: String,
+        },
+        email:{
+            type: String,
+            lowercase: true
+        },
+        name:{
+            type: String
+        }
+    }
 })
 
 userSchema.pre('save', async function (next) {
