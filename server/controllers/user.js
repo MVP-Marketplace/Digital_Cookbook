@@ -45,7 +45,8 @@ module.exports = {
     },
 
     signOut: async() => {
-        console.log('route hit')
+        res.clearCookie('access_token');
+        res.json({ success: true });
     },
 
     googleOauth: async (req, res, next) =>{
