@@ -1,30 +1,32 @@
 const express = require('express'),
-app = express(),
-cookieParser = require('cookie-parser'),
-bodyParser = require('body-parser'),
-morgan = require('morgan'),
-cors = require('cors'),
-ApiData = require('./api')
+  app = express(),
+  cookieParser = require('cookie-parser'),
+  bodyParser = require('body-parser'),
+  morgan = require('morgan'),
+  cors = require('cors'),
+  ApiData = require('./api');
 mongoose = require('mongoose');
 
+app.get('/axiosget', function (req, res, next) {
+  ApiData();
+  next();
+});
 
-app.get('/axiosget',function(req, res, next){
-    ApiData()
-    next();
-})
-
-mongoose.connect(process.env.MONGODB_URL, {
+mongoose
+  .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then((result)=> console.log('connected to db'))
+    useUnifiedTopology: true,
+  })
+  .then((result) => console.log('connected to db'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors({
+app.use(
+  cors({
     origin: 'http://localhost:5000',
-    credentials: true
-}))
-
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
