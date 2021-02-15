@@ -44,7 +44,7 @@ module.exports = {
         res.json({success:true});
     },
 
-    signOut: async() => {
+    signOut: async(req,res) => {
         res.clearCookie('access_token');
         res.json({ success: true });
     },

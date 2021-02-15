@@ -3,24 +3,17 @@ import axios from 'axios';
 import urlParams from './SpoonApiOptions';
 
 const SearchForm = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const results = await axios.get(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_SPOON_API_KEY}`,
-      );
-      setData(results.data.results);
-    };
-    getData();
-  }, []);
-
-  return (
-    <div>
+    const [result,setResult] = useState([])
+    useEffect(()=>{
+      axios.get('/axiosget').then(res => setResult(res.data))
+    },[])
+    return(
+      <div>
       <h2>This is the Search Form</h2>
       <div>
-        {data && data.length
-          ? data.map((recipe) => <div key={recipe.id}>{recipe.title}</div>)
+        {console.log(result)}
+        {result && result.length
+          ? result.map((recipe) => <div key={recipe.id}>{recipe.title}</div>)
           : 'Loading Recipes...'}
       </div>
       <section class="border p-4 mb-4 d-flex justify-content-center">
@@ -95,8 +88,10 @@ const SearchForm = () => {
         ))}
       </div>
     </div>
-  );
-};
+    )
+  }
+
+
 
 export default SearchForm;
 
