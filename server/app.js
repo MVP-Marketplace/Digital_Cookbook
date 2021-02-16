@@ -1,15 +1,26 @@
-const express = require('express'),
+const express = require('express')
+const axios = require('axios');
   app = express(),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
   morgan = require('morgan'),
   cors = require('cors'),
-  ApiData = require('./api');
 mongoose = require('mongoose');
 
-app.get('/axiosget', function (req, res, next) {
-  ApiData();
-  next();
+app.use('/axiosget', async function (req, res , next) {
+  try{
+    const {
+      data 
+    } = await axios.get(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.SPOONAPIKEY}`
+    )
+    let result = data.results
+    res.send(result)
+  }catch(e){
+    console.log(e)
+    res.status(500)
+  }
+  next()
 });
 
 mongoose
@@ -31,5 +42,4 @@ app.use(
 app.use(express.json());
 
 app.use('/users', require('./routes/users'));
-
 module.exports = app;
