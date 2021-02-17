@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import urlParams from './SpoonApiOptions';
-import useSWR from 'swr';
 const SearchForm = () => {
-  const fetcher = (url) => axios.get(url).then((res) => res.data);
-  const { data, error } = useSWR('/axiosget', fetcher);
-  if (error) return 'an error has happen';
-  if (!data) return 'loading...';
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const results = await axios.get(
+        `/api/search`,
+      );
+      setData(results.data.results);
+    };
+    getData();
+  }, []);
+
+  console.log(data)
   return (
     <div>
       <h2>This is the Search Form</h2>

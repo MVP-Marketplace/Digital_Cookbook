@@ -40,6 +40,6 @@ app.use(
 );
 
 app.use(express.json());
-
+app.use('/api', require('./routes/apiPoints'))
 app.use('/users', require('./routes/users'));
 module.exports = app;
