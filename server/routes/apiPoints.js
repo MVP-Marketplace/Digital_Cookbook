@@ -2,7 +2,7 @@ router = require('express-promise-router')()
 
 const apiController = require('../controllers/apiPoint')
 
-router.route('/search')
+router.route('/search/:query')
 .get(apiController.complexSearch)
 
 

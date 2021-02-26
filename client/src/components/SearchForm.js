@@ -7,7 +7,7 @@ const SearchForm = () => {
   useEffect(() => {
     const getData = async () => {
       const results = await axios.get(
-        `/api/search`,
+        `/api/search/african`,
       );
       setData(results.data.results);
     };
