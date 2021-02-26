@@ -1,11 +1,33 @@
-import React from 'react'
+import axios from 'axios';
+import React, {useState, useEffect} from 'react'
+import { useParams } from 'react-router-dom';
+import Container from "react-bootstrap/Container";
 
-const RecipePage = () => {
+const Recipe = () => {
+    const [idData, setIdData] = useState({});
+    let {id} = useParams();
+    useEffect(()=>{
+        const getData = async () =>{
+            const result = await axios.get(
+                `/api/id/${id}`
+            );
+            setIdData(result.data.ingredients)
+           
+        };
+        getData()
+        
+    },[id])
     return (
-        <div>
-            <h2>This is the Recipe Page</h2>
-        </div>
+        <Container>
+            <div>
+                    <h3>
+                        {console.log(idData)}
+                        {idData.name}
+                    </h3>      
+                        <img src={idData.image} />
+            </div>
+        </Container>
     )
 }
 
-export default RecipePage
+export default Recipe
