@@ -1,5 +1,4 @@
 const axios = require('axios');
-const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.SPOONAPIKEY}`
 let cacheData
 module.exports = {
     complexSearch : async (req,res,next) =>{
