@@ -8,12 +8,12 @@ const AllRecipies = ({data}) =>{
                   <div className="card">
                     <p>
                       {recipe.title}
-                    <img src={recipe.image} alt={"An image of the character" + recipe.title} />
+                    <img src={recipe.image} alt={"An image of the character" + recipe.title}  />
                     </p>
                   </div>
                 </a>
               ))
-            : "Nothing found :-/"}
+            : ''}
         </div>
       );
 }

@@ -2,13 +2,14 @@ const axios = require('axios');
 let cacheData
 module.exports = {
     complexSearch : async (req,res,next) =>{
-        const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.SPOONAPIKEY}`
-        const queryData = req.params['query']
+        const search = req.params['search']
+        const url = `https://api.spoonacular.com/recipes/complexSearch?query=${search}&apiKey=${process.env.SPOONAPIKEY}`
+        
             try{
                 const {data} = await axios.get(
                     url,{
                         params:{
-                            query: queryData
+                            query: search
                         }
                     }                   
                 )
@@ -35,5 +36,18 @@ module.exports = {
         catch(error){
             return next(error)
         }
+    },
+    randomRecipes : async (req,res,next) =>{
+        const url = `https://api.spoonacular.com/recipes/random?${process.env.SPOONAPIKEY}`
+        try{
+            const {data} = await axios.get(
+                url
+                }
+            )
+            return res.json(data)
+        }
+        catch(error){
+            return next(error)
+        }
+        
     }
-}

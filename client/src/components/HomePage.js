@@ -1,27 +1,23 @@
-import React , {useState, useEffect, Fragment} from 'react'
+import React from 'react'
 import axios from 'axios'
-import SearchForm from './SearchForm'
 import AllRecipies from './allRecipies'
+import NavMenu from './NavMenu'
+import Card from 'react-bootstrap/Card'
 const HomePage = () => {
-    const [data, setData] = useState({recipe: []});
-    const [search, setSearch] = useState("apple");
-    useEffect(()=>{
-        const getData = async () =>{
-            const result = await axios.get(
-                `/api/search/${search}`,
-                ); setData({ recipe: result.data.results})
-        }
-        getData()
-    }, [search]
-    
-)
-    return (
-        <Fragment>
-             <SearchForm setSearch={setSearch} initialPlaceholder={search} />
 
-             <AllRecipies data={data} />
-        </Fragment>
-         
+
+    return (
+<Card className="bg-dark text-white">
+  <Card.Img src="holder.js/100px270" alt="Card image" />
+  <Card.ImgOverlay>
+    <Card.Title>Card title</Card.Title>
+    <Card.Text>
+      This is a wider card with supporting text below as a natural lead-in to
+      additional content. This content is a little bit longer.
+    </Card.Text>
+    <Card.Text>Last updated 3 mins ago</Card.Text>
+  </Card.ImgOverlay>
+</Card>
     
     )
 }

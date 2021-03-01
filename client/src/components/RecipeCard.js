@@ -1,10 +1,20 @@
 import React from 'react'
-
-const RecipeCard = () => {
+import Container from "react-bootstrap/Container";
+import uuid from 'react-uuid'
+const RecipeCard = ({items}) => {
     return (
-        <div>
-            <h2>This is the Recipe Card</h2>
-        </div>
+      <Container>
+        <ul className="list-group list-group-flush">
+            {items && items.length 
+            ? items.map(item =>(
+                <li className="list-group-item" key={uuid()} >
+                    <p> {item.amount.us.value} {item.amount.us.unit} {item.name}</p>
+                    <img src={`https://spoonacular.com/cdn/ingredients_100x100/${item.image}`} /> 
+                </li>
+            )) : '' }
+
+        </ul>
+     </Container>   
     )
 }
 
