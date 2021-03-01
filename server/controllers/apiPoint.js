@@ -42,7 +42,7 @@ module.exports = {
         try{
             const {data} = await axios.get(
                 url
-                }
+                
             )
             return res.json(data)
         }
