@@ -1,5 +1,5 @@
 const axios = require('axios');
-let cacheData
+
 module.exports = {
     complexSearch : async (req,res,next) =>{
         const search = req.params['search']
@@ -13,7 +13,7 @@ module.exports = {
                         }
                     }                   
                 )
-                cacheData = data
+                
                 return res.json(data)
             }
             catch(error){
@@ -38,16 +38,51 @@ module.exports = {
         }
     },
     randomRecipes : async (req,res,next) =>{
-        const url = `https://api.spoonacular.com/recipes/random?${process.env.SPOONAPIKEY}`
+        let cacheData
+        let cacheTime
+        let catcheEx 
+        if(cacheTime && cacheTime > Date.now() - 30*8640000){
+            return res.json(cacheData)
+        }
+        const url = `https://api.spoonacular.com/recipes/random?apiKey=${process.env.SPOONAPIKEY}&number=1&tag=maincourse`
         try{
             const {data} = await axios.get(
-                url
-                
+                url    
             )
+
+            cacheData = data
+            cacheTime = Date.now()
+            catcheEx = cacheTime - 30*159400
+            data.cacheTime = cacheTime
+            data.catcheEx = catcheEx
             return res.json(data)
         }
         catch(error){
             return next(error)
         }
-        
-    }
+    } ,
+    randomRecipesThree : async (req,res,next) =>{
+        let cacheData
+        let cacheTime
+        let catcheEx 
+        if(cacheTime && cacheTime > Date.now() - 30*8640000){
+            return res.json(cacheData)
+        }
+        const url = `https://api.spoonacular.com/recipes/random?apiKey=${process.env.SPOONAPIKEY}&number=3&tag=maincourse`
+        try{
+            const {data} = await axios.get(
+                url    
+            )
+
+            cacheData = data
+            cacheTime = Date.now()
+            catcheEx = cacheTime - 30*159400
+            data.cacheTime = cacheTime
+            data.catcheEx = catcheEx
+            return res.json(data)
+        }
+        catch(error){
+            return next(error)
+        }
+    } 
+}

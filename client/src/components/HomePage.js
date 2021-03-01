@@ -1,24 +1,44 @@
-import React from 'react'
+import React, {useState , useEffect} from 'react'
+import uuid from 'react-uuid'
 import axios from 'axios'
-import AllRecipies from './allRecipies'
-import NavMenu from './NavMenu'
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import FrontFood from './frontFood'
+import Container from 'react-bootstrap/Container'
 const HomePage = () => {
-
+  const [data, setData] = useState();
+    useEffect(()=>{
+        const getData = async () =>{
+            const result = await axios.get(
+                `/api/random`,
+                ); setData(result.data.recipes)
+        }
+        getData()
+    } , [] 
+    
+)
 
     return (
-<Card className="bg-dark text-white">
-  <Card.Img src="holder.js/100px270" alt="Card image" />
-  <Card.ImgOverlay>
-    <Card.Title>Card title</Card.Title>
-    <Card.Text>
-      This is a wider card with supporting text below as a natural lead-in to
-      additional content. This content is a little bit longer.
-    </Card.Text>
-    <Card.Text>Last updated 3 mins ago</Card.Text>
-  </Card.ImgOverlay>
-</Card>
-    
+      <Container>
+        {data && data.length ? data.map(recipe =>(
+    <Card className="bg-dark text-white" key={uuid()}  >
+    <Card.Img src={recipe.image} alt="Card image" height="450px" />
+        <Card.ImgOverlay>
+            <h1>
+              This week's Featured Meal
+            </h1>
+                  <Card.Title>{recipe.title}</Card.Title>
+                  <Button variant="warning" href={`/recipe/${recipe.id}`}>Start Cooking</Button>
+           
+           
+                    <Card.Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </Card.Text>
+             </Card.ImgOverlay>
+       </Card>
+
+      )): null }
+        <h2>What else is cooking ?</h2>
+        <FrontFood />
+    </Container>
     )
 }
 

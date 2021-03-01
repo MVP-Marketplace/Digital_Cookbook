@@ -10,4 +10,8 @@ router.route('/id/:id')
 
 router.route('/random')
 .get(apiController.randomRecipes)
+
+router.route('/three')
+.get(apiController.randomRecipesThree)
+
 module.exports = router
