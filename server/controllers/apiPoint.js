@@ -89,8 +89,10 @@ module.exports = {
 /*Search Recipes by Ingredients
 ex: 
 https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=2
-*/
 
+I added this as an extra but it's probably unnecessary as Tristan did it in the complex search, this is 
+a more specific endpoint as the complex search can search for multiple data.
+*/
 const getrecipebyIngredients = async (request, response) =>{
     try{
         //right it accpets a maximum of three ingredients and return up to 2 pages of recipes
@@ -99,7 +101,7 @@ const getrecipebyIngredients = async (request, response) =>{
         const { ingredientThree } = request.query;
 
         const recipeList = await axios.get(`
-        https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientOne},+${ingredientTwo},+${ingredientThree}&number=2
+        https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientOne},+${ingredientTwo},+${ingredientThree}&number=2&apiKey=${process.env.SPOONAPIKEY}
         `)
 
         response.json({ data: recipeList.data })
