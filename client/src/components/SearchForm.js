@@ -1,3 +1,4 @@
+
 import React, { useState} from 'react';
 import axios from 'axios';
 import urlParams from './SpoonApiOptions';
@@ -120,6 +121,5 @@ const SearchForm = () => {
       </div>
     </div>
   );
-};
 
 export default SearchForm;
