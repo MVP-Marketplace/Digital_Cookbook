@@ -2,6 +2,7 @@ router = require('express-promise-router')()
 
 const apiController = require('../controllers/apiPoint')
 
+
 router.route('/search/:search')
 .get(apiController.complexSearch)
 
@@ -13,5 +14,8 @@ router.route('/random')
 
 router.route('/three')
 .get(apiController.randomRecipesThree)
+
+router.route('/searchbyIngredients')
+.get(apiController.getrecipebyIngredients)
 
 module.exports = router
