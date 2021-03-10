@@ -19,3 +19,31 @@ module.exports = {
             }
         }
     }
+
+
+/*Search Recipes by Ingredients
+ex: 
+https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=2
+*/
+
+const getrecipebyIngredients = async (request, response) =>{
+    try{
+        //right it accpets a maximum of three ingredients and return up to 2 pages of recipes
+        const { ingredientOne } = request.query;
+        const { ingredientTwo } = request.query;
+        const { ingredientThree } = request.query;
+
+        const recipeList = await axios.get(`
+        https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientOne},+${ingredientTwo},+${ingredientThree}&number=2
+        `)
+
+        response.json({ data: recipeList.data })
+
+    }catch(e){
+        res.status(400).json({ error: e.toString() });
+    }
+}
+
+module.exports = {
+    getrecipebyIngredients
+}
